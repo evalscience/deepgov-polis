@@ -25,19 +25,26 @@ jobs:
       - name: Download Polis summary reports
         run: |
           curl https://pol.is/api/v3/reportExport/r5d5xd3mujrnkkyuyrkbv/summary.csv > 9beed8nszd-summary.csv
+          curl curl: https://pol.is/api/v3/xid/997f4eb9-c8b1-4a9e-aef5-f95b07e84add-xid.csv > 9beed8nszd-xid.csv
           curl https://pol.is/api/v3/reportExport/r8hyz43tdvsk6knwvufjc/summary.csv > 67rd2fmrpm-summary.csv
+          curl https://pol.is/api/v3/xid/cf103d7c-1dc3-470c-bbec-44a2e4fe3ba4-xid.csv > 67rd2fmrpm-xid.csv
           curl https://pol.is/api/v3/reportExport/r2pcmwsems3fsk7nyxcez/summary.csv > 9my4ftmrim-summary.csv
+          curl https://pol.is/api/v3/xid/429415e7-335a-4f9d-8877-15e48c122b4b-xid.csv > 9my4ftmrim-xid.csv
       
       - name: Move files to summary folder
         run: |
           mv 9beed8nszd-summary.csv summary/
           mv 67rd2fmrpm-summary.csv summary/
           mv 9my4ftmrim-summary.csv summary/
+          mv 9beed8nszd-xid.csv xid/
+          mv 67rd2fmrpm-xid.csv xid/
+          mv 9my4ftmrim-xid.csv xid/
       
       - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add summary/
+          git add xid/
           git commit -m "Update Polis summary reports" || echo "No changes to commit"
           git push 
