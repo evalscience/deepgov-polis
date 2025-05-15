@@ -1,0 +1,39 @@
+name: Download Polis Summary Reports
+
+on:
+  # Run manually via GitHub UI
+  workflow_dispatch:
+  # Run on a schedule (daily at midnight UTC)
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  download-and-update:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Create summary directory if it doesn't exist
+        run: mkdir -p summary
+      
+      - name: Download Polis summary reports
+        run: |
+          curl https://pol.is/api/v3/reportExport/r5d5xd3mujrnkkyuyrkbv/summary.csv > 9beed8nszd-summary.csv
+          curl https://pol.is/api/v3/reportExport/r8hyz43tdvsk6knwvufjc/summary.csv > 67rd2fmrpm-summary.csv
+          curl https://pol.is/api/v3/reportExport/r2pcmwsems3fsk7nyxcez/summary.csv > 9my4ftmrim-summary.csv
+      
+      - name: Move files to summary folder
+        run: |
+          mv 9beed8nszd-summary.csv summary/
+          mv 67rd2fmrpm-summary.csv summary/
+          mv 9my4ftmrim-summary.csv summary/
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add summary/
+          git commit -m "Update Polis summary reports" || echo "No changes to commit"
+          git push 
